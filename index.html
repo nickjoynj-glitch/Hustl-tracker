@@ -426,9 +426,9 @@ function updateHeroText() {
     title.innerHTML = first + ' <span>' + (rest || '') + '</span>';
   }
   const dateStr = cfg.date || 'Your Goal Awaits';
-  sub.textContent = 'Hustl Performance · ' + dateStr;
-  dashSub.textContent = (cfg.goal || 'Hustl Performance') + ' · ' + dateStr;
-  coachSub.textContent = (cfg.name || 'Athlete') + ' · Hustl Performance';
+  sub.textContent = 'Hustl Performance \u00B7 ' + dateStr;
+  dashSub.textContent = (cfg.goal || 'Hustl Performance') + ' \u00B7 ' + dateStr;
+  coachSub.textContent = (cfg.name || 'Athlete') + ' \u00B7 Hustl Performance';
   const wofLabel = document.getElementById('week-of-label');
   if (wofLabel) wofLabel.textContent = 'of ' + (cfg.length || 12);
 }
@@ -444,11 +444,11 @@ function buildDefaultProgram(numWeeks) {
     prog[w] = {
       phase: phase,
       days: [
-        { day:'MON', type:'WORKOUT', title:'Session 1 — Week ' + w, goal:'Coach will fill this in.', exercises:[{name:'Exercise 1',sets:3,reps:'10',weight:'TBD'},{name:'Exercise 2',sets:3,reps:'10',weight:'TBD'}] },
-        { day:'TUE', type:'CONDITIONING', title:'Conditioning — Week ' + w, goal:'Coach will fill this in.', exercises:[{name:'Drill 1',sets:3,reps:'30 sec',weight:'bodyweight'},{name:'Drill 2',sets:3,reps:'30 sec',weight:'bodyweight'}] },
+        { day:'MON', type:'WORKOUT', title:'Session 1  -  Week ' + w, goal:'Coach will fill this in.', exercises:[{name:'Exercise 1',sets:3,reps:'10',weight:'TBD'},{name:'Exercise 2',sets:3,reps:'10',weight:'TBD'}] },
+        { day:'TUE', type:'CONDITIONING', title:'Conditioning  -  Week ' + w, goal:'Coach will fill this in.', exercises:[{name:'Drill 1',sets:3,reps:'30 sec',weight:'bodyweight'},{name:'Drill 2',sets:3,reps:'30 sec',weight:'bodyweight'}] },
         { day:'WED', type:'REST', title:'Active Recovery', goal:'Light movement. Stretch. Sleep.', exercises:[{name:'Walk or Stretch',sets:1,reps:'20-30 min',weight:'easy'}] },
-        { day:'THU', type:'WORKOUT', title:'Session 2 — Week ' + w, goal:'Coach will fill this in.', exercises:[{name:'Exercise A',sets:4,reps:'8',weight:'TBD'},{name:'Exercise B',sets:4,reps:'8',weight:'TBD'}] },
-        { day:'FRI', type:'CONDITIONING', title:'Speed/Power Work — Week ' + w, goal:'Coach will fill this in.', exercises:[{name:'Power Drill',sets:5,reps:'5',weight:'explosive'}] }
+        { day:'THU', type:'WORKOUT', title:'Session 2  -  Week ' + w, goal:'Coach will fill this in.', exercises:[{name:'Exercise A',sets:4,reps:'8',weight:'TBD'},{name:'Exercise B',sets:4,reps:'8',weight:'TBD'}] },
+        { day:'FRI', type:'CONDITIONING', title:'Speed/Power Work  -  Week ' + w, goal:'Coach will fill this in.', exercises:[{name:'Power Drill',sets:5,reps:'5',weight:'explosive'}] }
       ]
     };
   }
@@ -528,7 +528,7 @@ function renderProgram() {
   banner.style.border = '1px solid ' + pc + '33';
   document.getElementById('phase-name').textContent = 'PHASE ' + phase;
   document.getElementById('phase-name').style.color = pc;
-  document.getElementById('phase-info').textContent = (cfg.goal || 'TRAINING') + ' · ' + (cfg.date || '');
+  document.getElementById('phase-info').textContent = (cfg.goal || 'TRAINING') + ' \u00B7 ' + (cfg.date || '');
   document.getElementById('week-display').textContent = 'WEEK ' + currentWeek;
   document.getElementById('week-of-label').textContent = 'of ' + numWeeks;
 
@@ -606,7 +606,7 @@ async function submitCheckin() {
     goal,
     effort: ratings.effort, recovery: ratings.recovery,
     sleep: ratings.sleep, confidence: ratings.confidence,
-    weight: weight || '—',
+    weight: weight || ' - ',
     message: msg, timestamp: Date.now()
   };
 
@@ -630,11 +630,11 @@ async function submitCheckin() {
           week: currentWeek,
           date: new Date().toLocaleDateString(),
           goal: goal,
-          effort: ratings.effort || '—',
-          recovery: ratings.recovery || '—',
-          sleep: ratings.sleep || '—',
-          confidence: ratings.confidence || '—',
-          weight: weight || '—',
+          effort: ratings.effort || ' - ',
+          recovery: ratings.recovery || ' - ',
+          sleep: ratings.sleep || ' - ',
+          confidence: ratings.confidence || ' - ',
+          weight: weight || ' - ',
           message: msg || '(no message)'
         }
       })
@@ -645,7 +645,7 @@ async function submitCheckin() {
       throw new Error('HTTP ' + res.status);
     }
   } catch(e) {
-    msgEl.textContent = '\u2713 SAVED LOCALLY — check your internet connection';
+    msgEl.textContent = '\u2713 SAVED LOCALLY  -  check your internet connection';
     console.error('EmailJS error:', e);
   }
 
@@ -661,7 +661,7 @@ function openLog(dayIndex) {
   const day = PROGRAM[currentWeek].days[dayIndex];
   const key = getKey(currentWeek, dayIndex);
   const existing = getLogs()[key] || {};
-  document.getElementById('log-subtitle').textContent = 'Week ' + currentWeek + ' · ' + day.day + ' · ' + day.title;
+  document.getElementById('log-subtitle').textContent = 'Week ' + currentWeek + ' \u00B7 ' + day.day + ' \u00B7 ' + day.title;
   document.getElementById('log-date').value = existing.date || new Date().toISOString().split('T')[0];
   document.getElementById('log-time').value = existing.totalTime || '';
   document.getElementById('log-sleep').value = existing.sleep || '';
@@ -743,7 +743,7 @@ function renderCoach() {
     list.innerHTML = '<div class="no-checkins">No check-ins received yet.<br>Athletes submit from the Program tab each week.</div>';
     return;
   }
-  list.innerHTML = checkins.map(c => '<div class="checkin-item"><div class="ci-top"><div class="ci-name">' + c.name + ' &mdash; Week ' + c.week + '</div><div class="ci-date">' + c.date + '</div></div><div class="ci-metrics"><div class="ci-metric"><div class="ci-metric-l">Goal</div><div style="font-size:11px;color:var(--text);font-family:Barlow Condensed,sans-serif;letter-spacing:1px">' + (c.goal || '—') + '</div></div><div class="ci-metric"><div class="ci-metric-l">Effort</div><div class="ci-metric-v" style="color:var(--red)">' + (c.effort || '—') + '/10</div></div><div class="ci-metric"><div class="ci-metric-l">Recovery</div><div class="ci-metric-v" style="color:#2563eb">' + (c.recovery || '—') + '/10</div></div><div class="ci-metric"><div class="ci-metric-l">Sleep</div><div class="ci-metric-v" style="color:#15803d">' + (c.sleep || '—') + 'h</div></div><div class="ci-metric"><div class="ci-metric-l">Confidence</div><div class="ci-metric-v" style="color:#FF6B00">' + (c.confidence || '—') + '/10</div></div><div class="ci-metric"><div class="ci-metric-l">Weight</div><div class="ci-metric-v" style="color:#e2b96e">' + (c.weight || '—') + ' lbs</div></div></div>' + (c.message ? '<div class="ci-note">&ldquo;' + c.message + '&rdquo;</div>' : '') + '</div>').join('');
+  list.innerHTML = checkins.map(c => '<div class="checkin-item"><div class="ci-top"><div class="ci-name">' + c.name + ' &mdash; Week ' + c.week + '</div><div class="ci-date">' + c.date + '</div></div><div class="ci-metrics"><div class="ci-metric"><div class="ci-metric-l">Goal</div><div style="font-size:11px;color:var(--text);font-family:Barlow Condensed,sans-serif;letter-spacing:1px">' + (c.goal || ' - ') + '</div></div><div class="ci-metric"><div class="ci-metric-l">Effort</div><div class="ci-metric-v" style="color:var(--red)">' + (c.effort || ' - ') + '/10</div></div><div class="ci-metric"><div class="ci-metric-l">Recovery</div><div class="ci-metric-v" style="color:#2563eb">' + (c.recovery || ' - ') + '/10</div></div><div class="ci-metric"><div class="ci-metric-l">Sleep</div><div class="ci-metric-v" style="color:#15803d">' + (c.sleep || ' - ') + 'h</div></div><div class="ci-metric"><div class="ci-metric-l">Confidence</div><div class="ci-metric-v" style="color:#FF6B00">' + (c.confidence || ' - ') + '/10</div></div><div class="ci-metric"><div class="ci-metric-l">Weight</div><div class="ci-metric-v" style="color:#e2b96e">' + (c.weight || ' - ') + ' lbs</div></div></div>' + (c.message ? '<div class="ci-note">&ldquo;' + c.message + '&rdquo;</div>' : '') + '</div>').join('');
 }
 
 // Init
